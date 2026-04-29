@@ -95,14 +95,30 @@ Use numbered lists for step-by-step instructions. AI agents handle numbered step
 correctly and present them in order. Use bullet points for non-sequential lists
 (options, features, alternatives).
 
-### 7. Specific values
+### 7. Describe the user experience, not the implementation
 
-Include exact defaults, ranges, option names, and error messages from the code.
-AI agents need precision to give precise answers.
+The code is your source of truth for verifying what exists. But articles should
+describe what users can do, see, and configure — not how the code works behind
+the scenes.
 
-Bad: "You can configure various timeout options."
-Good: "The request timeout defaults to 30 seconds. Set the `requestTimeout` option
-to any value between 1 and 300 seconds."
+Ask yourself: "Is this about the product's interface (what users interact with) or
+the product's internals (how the developers built it)?" Write about the interface.
+Even if the product targets technical users, they care about the product's API,
+commands, and configuration — not its database schema or retry logic.
+
+Bad: "The system stores records in a PostgreSQL database with JSONB columns."
+Good: "Your data is saved automatically and available across sessions."
+
+Bad: "The upload handler validates file MIME types and converts to WebP at 80% quality."
+Good: "You can upload images in common formats like PNG and JPEG."
+
+Bad: "The scheduler runs a cron job every 15 minutes with exponential backoff on failure."
+Good: "Reports are updated automatically throughout the day."
+
+Never expose the product's own internals: database technologies, internal file
+formats, algorithms, thresholds, retry logic, queue systems, caching layers, or
+data structures. These are developer concerns, not user concerns — regardless of
+how technical the user is.
 
 ### 8. Consistent terminology
 
@@ -157,6 +173,9 @@ plain `.md` importable into any help center.
   on import. Repeat the necessary context inline instead.
 - **Speculation** — Only document what exists in the actual code. If you're not sure a
   feature exists, don't write about it.
+- **Internal implementation** — Never expose how the product is built: database
+  technologies, internal file formats, algorithms, retry logic, queue systems, caching
+  layers. Write about the product's interface, not its internals.
 - **Sensitive data** — Never include env var values, API keys, internal URLs, PII, or
   security implementation details. Describe what a setting does, never its actual value.
   Write as if the article will be published publicly.
