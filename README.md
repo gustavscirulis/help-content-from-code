@@ -4,6 +4,8 @@ Analyze any codebase and generate a complete help center knowledge base as struc
 
 Works with Claude Code, GitHub Copilot, Cursor, Codex, Gemini CLI, and any agent that supports the [Agent Skills](https://agentskills.io) standard.
 
+**[See the demo →](https://help-content-from-code.gustavscirulis.com)** — this skill read three open-source codebases (Ollama, QMD, Pearcleaner) and produced every article on the demo site from the source code alone. You can browse the full generated content — articles, categories, sections.
+
 Point it at a repo, and it will:
 1. **Discover** what the product does by reading the code
 2. **Plan** which articles to write, prioritized by which user questions they'd resolve
