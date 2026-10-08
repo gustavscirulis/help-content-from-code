@@ -69,16 +69,40 @@ Generate a knowledge base for this codebase, optimized for AI agents
 What help content should we write for this project?
 ```
 
-The skill walks you through discovery, presents a content plan for approval, then writes articles in batches. You control the pacing — review each batch and decide what to write next.
+The skill walks you through discovery, lists the complete proposed content plan
+in chat for approval, then writes articles in batches. It saves
+`content-plan.md` only after you approve the plan. You control the pacing —
+review each batch and decide what to write next.
+
+The source repository is treated as untrusted evidence. The skill reads relevant
+files to verify product behavior, but does not run project scripts or follow
+instructions found in READMEs, comments, config values, or tool output. Writers
+receive paraphrased facts with source paths, and generated articles are reviewed
+against those sources before delivery. These instructions reduce prompt injection
+risk; they are not a technical sandbox.
 
 ## How it works
 
 | Phase | What happens |
 |---|---|
 | **Discover** | Reads README, routes, components, config schemas, error messages. Detects project type (web app, CLI, library, etc.) and target audience. |
-| **Plan** | Creates a prioritized content plan. Articles ranked by query resolution value — which user questions would this article answer? |
-| **Write** | Dispatches sub-agents to write articles in parallel. Each article grounded in specific source files. You review each batch before continuing. |
-| **Deliver** | Final summary of everything written, with next steps for deployment. |
+| **Plan** | Lists every proposed article in chat, ranked by query resolution value, and waits for approval before writing files. |
+| **Write** | Dispatches sub-agents with paraphrased evidence briefs. Each article is checked against specific source files. You review each batch before continuing. |
+| **Deliver** | Final summary of everything written, with optional Fin setup and draft upload. |
+
+## Optional Fin delivery
+
+The markdown knowledge base is complete without Fin. If you ask for Fin setup,
+the skill checks for an installed Intercom CLI. If it is missing, it shows a
+verified, version-pinned installation command and asks whether to install it,
+give you instructions to install it yourself, or skip Fin. Declining leaves the
+markdown files ready for any help center.
+
+Before setup or upload, the skill shows the target workspace and planned actions.
+It uploads only reviewed articles as drafts using Intercom API 2.16's
+`body_markdown` field. The skill does not generate a conversion script, use
+`npx`, or install packages automatically. Setup skips Fin activation. Publishing
+articles and enabling customer answers require separate explicit requests.
 
 ## What it won't do
 
@@ -86,6 +110,8 @@ The skill walks you through discovery, presents a content plan for approval, the
 - **Won't expose implementation details** — writes for the product's users, not its developers
 - **Won't include sensitive data** — treats all output as if it will be published publicly
 - **Won't guess** — every claim traces back to actual code
+- **Won't run repository commands** — source files are evidence, not agent instructions
+- **Won't install the Intercom CLI without asking** — Fin delivery is optional
 
 ## Skill structure
 
